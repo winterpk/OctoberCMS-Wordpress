@@ -1,2 +1,2 @@
-# OctoberCMS-Wordpress-Components
-Wordpress Components Plugin for October CMS
+# OctoberCMS-Wordpress
+An OctoberCMS plugin that provides access to Wordpress with a set of components
