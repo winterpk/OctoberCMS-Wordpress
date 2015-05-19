@@ -1,0 +1,36 @@
+<form id="register-form" data-request="onSubmit" data-request-update="'{{__SELF__}}::emailmessage':'#account-forms'">
+		
+	<span class="error username"></span>
+	<div class="form-group">
+		<input type="text" placeholder="username" name="username" class="form-control" />
+	</div>
+	
+	<span class="error email"></span>
+	<div class="form-group">
+		<input type="text" placeholder="email" name="email" class="form-control" />
+	</div>
+	
+	<span class="error password"></span>
+	<div class="form-group">
+		<input type="password" placeholder="password" name="password" class="form-control" />
+	</div>
+	
+	<span class="error password_confirmation"></span>
+	<div class="form-group">
+		<input type="password" placeholder="confirm password" name="password_confirmation" class="form-control" />
+	</div>
+	
+	<input type="hidden" name="type" value="register" />
+	<div class="row">
+		<div class="col-sm-12 clearfix">
+			<!--
+    		<label class="checkbox pull-left" for="remember_register">
+                <input type="checkbox" value="remember_register" name="remember_register" id="remember_register" class="custom-checkbox" data-toggle="checkbox">
+                Remember Me
+            </label>
+            <a id="forgot-password" href="#">Forgot password</a>
+           -->
+        </div>
+    </div>
+    <input type="submit" value="Register" name="submit" class="btn btn-primary" />
+</form>

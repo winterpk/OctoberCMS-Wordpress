@@ -1,0 +1,14 @@
+fields:
+  database_host:
+    label: Database Host
+    placeholder: localhost
+  database_name:
+    label: Database Name
+    placeholder: Wordpress
+  database_user:
+    label: Database User
+    placeholder: root
+  database_pass:
+    label: Database Pass
+    placeholder: Password 
+  

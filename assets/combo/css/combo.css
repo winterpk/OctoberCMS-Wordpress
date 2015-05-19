@@ -1,0 +1,46 @@
+#account-forms {
+	transition: all 0.5s ease;
+}
+#account-forms h2 {
+	font-size: 24px;
+	margin: 10px 0;
+	font-weight: normal;
+}
+#account-forms .radio {
+	margin: 0 10px 0 0;
+	
+}
+#account-forms .radio + .radio {
+	margin: 0;
+}
+#account-forms .error {
+	color: #e74c3c;
+	font-size: 16px;
+}
+#forgot-password {
+	margin: 10px 0 12px;
+	font-size: 14px;
+	float: right;
+}
+@media (max-width: 360px) {
+	#forgot-password {
+		float: left;
+		clear: left;
+	}
+}
+#account-forms { }
+#account-forms input.form-control {
+	margin-bottom: 10px;
+}
+#account-forms .radios {
+	margin-bottom: 10px;
+}
+#register-form {
+	display: none;
+}
+#account-forms input[type="submit"] {
+	width: 100%;
+}
+#email-message {
+	text-align: center;
+}

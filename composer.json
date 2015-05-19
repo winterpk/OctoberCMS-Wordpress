@@ -1,0 +1,27 @@
+{
+  "config":{
+    "cache-files-ttl": 0
+  },
+  "repositories": [
+    {
+      "type": "package",
+      "package": {
+        "name": "wordpress-shortinit",
+        "version": "4.2.1",
+        "dist": {
+          "type": "zip",
+          "url": "https://github.com/winterpk/wordpress-4.2.1-shortinit/archive/master.zip"
+        },
+        "require" : {
+          "fancyguy/webroot-installer": "1.0.0"
+        }
+      }
+    }
+  ],
+  "require": {
+  	
+    "php": ">=5.3.0",
+    "wordpress-shortinit": "4.2.1",
+    "fancyguy/webroot-installer": "1.0.0"
+  }
+}

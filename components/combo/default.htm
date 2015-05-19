@@ -1,0 +1,22 @@
+{# Default Combo template #}
+<div id="account-forms">
+	<h2>Sign in to continue</h2>
+	<div class="radios">
+		<label class="radio-inline radio">
+			<input type="radio" name="type" value="register"  data-toggle="radio" />
+			New User
+		</label>
+		<label class="radio-inline radio">
+			<input type="radio" name="type" value="login"  data-toggle="radio" checked="checked" />
+			Existing User
+		</label>
+	</div>
+	
+	<div id="login-form-wrap">
+		{% partial "combo::login" %}
+	</div>
+	
+	<div id="register-form-wrap">
+		{% partial "combo::register" %}
+	</div>
+</div>
