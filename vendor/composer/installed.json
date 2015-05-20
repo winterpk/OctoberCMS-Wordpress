@@ -44,12 +44,12 @@
         "homepage": "http://fancyguy.github.com/webroot-installer/"
     },
     {
-        "name": "wordpress-shortinit",
-        "version": "4.2.1",
-        "version_normalized": "4.2.1.0",
+        "name": "wordpress-simple-email-verification",
+        "version": "1.0.0",
+        "version_normalized": "1.0.0.0",
         "dist": {
             "type": "zip",
-            "url": "https://github.com/winterpk/wordpress-4.2.1-shortinit/archive/master.zip",
+            "url": "https://github.com/winterpk/Wordpress-Simple-Email-Verification/archive/master.zip",
             "reference": null,
             "shasum": null
         },

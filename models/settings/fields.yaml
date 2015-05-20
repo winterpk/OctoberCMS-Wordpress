@@ -10,5 +10,4 @@ fields:
     placeholder: root
   database_pass:
     label: Database Pass
-    placeholder: Password 
-  
+    placeholder: Password

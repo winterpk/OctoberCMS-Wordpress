@@ -10,15 +10,7 @@ use Winterpk\Wordpress\Vendor\Wordpress;
  */
 class User {
 	
-	public static function instance() {
-		static $instance = null;
-		if ($instance === null) {
-			$instance = new static();
-		}
-		return $instance;
-	}
-	
-	private function __construct() {
+	function __construct() {
 		$settings = Settings::instance();
 		
 		// Load up wordpress with shortinit
@@ -129,9 +121,7 @@ class User {
 
 		// Get the results from the query, returning the first user
 		$users = $user_query->get_results();
-
 		return $users[0];
-
 	}
 	
 	function toArray()
@@ -140,6 +130,7 @@ class User {
 		return (array)$user->data;	
 	}
 	
+/**
 	function facebook_connected()
 	{
 		$user = wp_get_current_user();
@@ -167,7 +158,7 @@ class User {
 			return false;
 		}
 	}
-	
+**/
 	function force_login($user_id, $remember = false)
 	{
 		$first_login = get_user_meta($user_id, '_first_login', true);
@@ -203,7 +194,20 @@ class User {
 		return array('key' => $key, 'email' => $user->user_email, 'username' => $user->user_login);	
 	}
 	
-	function register_user($userdata, $verify = true) {
+	function authenticate($username, $password) {
+		$signon = wp_signon($creds);
+	}
+	
+	function check() {
+		
+	}
+	
+	function getUser() {
+		$user = wp_get_current_user();
+		return (array)$user->data;	
+	}
+	
+	function register($userdata, $verify = true) {
 		$errors = array();
 		
 		if ( ! isset($userdata['username']) || ! isset($userdata['password']) ) {

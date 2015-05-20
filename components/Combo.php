@@ -3,6 +3,7 @@
 use Cms\Classes\ComponentBase;
 // Wordpress user class
 use Winterpk\Wordpress\Classes\wpUser;
+//use Winterpk\Wordpress\Facades\Auth;
 use Validator;
 use Flash;
 use Redirect;
@@ -36,6 +37,22 @@ class Combo extends ComponentBase
         ];
     }
 	
+	/**
+	 * Add styles and javascript not working properply
+	 * This is in the default.html now
+	 * 
+	 */
+	public function onRun() {
+		$this->addCss('/plugins/winterpk/wordpress/assets/global/css/global.css');
+		$this->addJs('/plugins/winterpk/wordpress/assets/combo/js/combo.js');
+		$this->addCss('/plugins/winterpk/wordpress/assets/combo/css/combo.css');
+	}
+	
+	public function onRender()
+	{
+		$this->page->password_recovery_link = $this->property('password_recovery_page');
+	}
+		
 	/**
 	 * Ajax handler
 	 * 
@@ -83,14 +100,13 @@ class Combo extends ComponentBase
 				if (isset($check['errors'])) {
 					return $check;
 				} else {
-					return Redirect::to($this->property('redirect_login'));	
+					return Redirect::to($this->property('redirect_login'));
 				}
 				break;
 		}
 		
 		// How to redirect
 		//return Redirect::to('http://google.com');
-		
 		return false;
 	}
 	
@@ -119,24 +135,16 @@ class Combo extends ComponentBase
 				 'type'              => 'string',
 				 'required' 		 => 'true',
 				 'validationMessage' => 'This field is required',
+			],
+			'email_verfication' => [
+				 'title'             => 'Login Registration',
+				 'description'       => 'If set to true, the user must validate their email before they can log in.',
+				 'default'           => 'false',
+				 'type'              => 'dropdown',
+				 'options'			 => ['true'=>'Yes','false'=>'No'],
 			]
 		];
 	}
 	
-	/**
-	 * Add styles and javascript not working properply
-	 * This is in the default.html now
-	 * 
-	 */
-	public function onRun() {
-		//$this->addJs('/plugins/winterpk/wordpress/assets/global/js/global.js'); // This is included in the theme now
-		$this->addCss('/plugins/winterpk/wordpress/assets/global/css/global.css');
-		$this->addJs('/plugins/winterpk/wordpress/assets/combo/js/combo.js');
-		$this->addCss('/plugins/winterpk/wordpress/assets/combo/css/combo.css');
-	}
-	
-	public function onRender()
-	{
-		$this->page->password_recovery_link = $this->property('password_recovery_page');
-	}
+
 }

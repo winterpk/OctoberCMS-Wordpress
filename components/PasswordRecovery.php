@@ -28,7 +28,7 @@ class PasswordRecovery extends ComponentBase
     {
         return [
             'name'        => 'Password Recovery',
-            'description' => 'Drop this onto a template to include a password recovery form'
+            'description' => 'Put this onto the password recovery page (default: /password-recovery)'
         ];
     }
 	

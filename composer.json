@@ -6,11 +6,11 @@
     {
       "type": "package",
       "package": {
-        "name": "wordpress-shortinit",
-        "version": "4.2.1",
+        "name": "wordpress-simple-email-verification",
+        "version": "1.0.0",
         "dist": {
           "type": "zip",
-          "url": "https://github.com/winterpk/wordpress-4.2.1-shortinit/archive/master.zip"
+          "url": "https://github.com/winterpk/Wordpress-Simple-Email-Verification/archive/master.zip"
         },
         "require" : {
           "fancyguy/webroot-installer": "1.0.0"
@@ -21,7 +21,7 @@
   "require": {
   	
     "php": ">=5.3.0",
-    "wordpress-shortinit": "4.2.1",
+    "wordpress-simple-email-verification": "1.0.0",
     "fancyguy/webroot-installer": "1.0.0"
   }
 }

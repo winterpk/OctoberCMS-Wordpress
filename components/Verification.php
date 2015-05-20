@@ -37,20 +37,6 @@ class Verification extends \Cms\Classes\ComponentBase
 	 * 
 	 */
 	public function onRun() {
-		$this->_user = wpUser::instance();
-		$get = get();
 		
-		if (isset($get['email']) &&  filter_var($get['email'], FILTER_VALIDATE_EMAIL)){
-			$email = $get['email'];
-		}
-		if (isset($get['key']) && (strlen($get['key']) == 32)) {
-			$key = $get['key'];
-		}
-		if (isset($email) && isset($key)) {
-			$check = $this->_user->validate_user($email, $key);
-			return Redirect::to($this->property('redirect'));
-		} else {
-			return Redirect::to('/');
-		}
 	}
 }

@@ -1,6 +1,6 @@
 <?php namespace Winterpk\Wordpress;
-
 use System\Classes\PluginBase;
+use App;
 
 /**
  * Wordpress Plugin Information File
@@ -22,6 +22,30 @@ class Plugin extends PluginBase
             'icon'        => 'icon-wordpress'
         ];
     }
+	
+	public function boot()
+	{
+		$get = get();
+		if ( ! empty($_GET['verify'])) {
+			$this->_user = wpUser::instance();
+			$get = get();
+			
+			if (isset($get['email']) &&  filter_var($get['email'], FILTER_VALIDATE_EMAIL)){
+				$email = $get['email'];
+			}
+			if (isset($get['key']) && (strlen($get['key']) == 32)) {
+				$key = $get['key'];
+			}
+			if (isset($email) && isset($key)) {
+				$check = $this->_user->validate_user($email, $key);
+				return Redirect::to($this->property('redirect'));
+			} else {
+				return Redirect::to('/');
+			}
+		}
+		// Register Auth service provider
+		App::register('Winterpk\Wordpress\Classes\AuthServiceProvider');
+	}
 	
 	public function registerSchedule($schedule)
 	{
