@@ -18,8 +18,7 @@ class User {
 		define('WP_DATABASE_PASS', $settings->database_pass);
 		define('WP_DATABASE_NAME', $settings->database_name);
 		define('WP_DATABASE_HOST', $settings->database_host);
-		//define('SHORTINIT', true);
-		require_once(dirname(__FILE__).'/../vendor/wordpress-shortinit/wp-load.php');
+		require_once(dirname(__FILE__).'/../lib/wordpress-simple-email-verification/wp-load.php');
 	}
 	
 	/**

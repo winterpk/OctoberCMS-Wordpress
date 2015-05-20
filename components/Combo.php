@@ -1,9 +1,7 @@
 <?php namespace Winterpk\Wordpress\Components;
 
 use Cms\Classes\ComponentBase;
-// Wordpress user class
-use Winterpk\Wordpress\Classes\wpUser;
-//use Winterpk\Wordpress\Facades\Auth;
+use Winterpk\Wordpress\Facades\Auth;
 use Validator;
 use Flash;
 use Redirect;
@@ -30,7 +28,8 @@ class Combo extends ComponentBase
 		'email' => 'Invalid Email',
 	);
 	
-    public function componentDetails() {
+    public function componentDetails()
+    {
         return [
             'name'        => 'Combo Form',
             'description' => 'Drops in a combination register / signup form'
@@ -42,7 +41,8 @@ class Combo extends ComponentBase
 	 * This is in the default.html now
 	 * 
 	 */
-	public function onRun() {
+	public function onRun()
+	{
 		$this->addCss('/plugins/winterpk/wordpress/assets/global/css/global.css');
 		$this->addJs('/plugins/winterpk/wordpress/assets/combo/js/combo.js');
 		$this->addCss('/plugins/winterpk/wordpress/assets/combo/css/combo.css');
@@ -57,9 +57,12 @@ class Combo extends ComponentBase
 	 * Ajax handler
 	 * 
 	 */
-	public function onSubmit() {
-		$this->_user = wpUser::instance();
+	public function onSubmit()
+	{
 		$post = post();
+		if (empty($post['type'])) {
+			return false;
+		}
 		
 		// Check type
 		switch ($post['type']) {
@@ -70,32 +73,29 @@ class Combo extends ComponentBase
 				if ($validation->fails()) {
 					return array('errors' => $validation->errors()->toArray());
 				}
-				
+
 				// Register the user
-				$check = $this->_user->register_user($post);
+				$check = Auth::register($post, (bool)$this->property('email_verfication'));
 				if (isset($check['errors'])) {
 					return $check;
 				}
-				
-				//return Redirect::to($this->property('redirect_registration'));
+				return true;
 				break;
 			case 'login':
 				
 				// Validate input
 				$validation = Validator::make($post, $this->login_rules, $this->messages);
-				
 				if ($validation->fails()) {
 					return array('errors' => $validation->errors()->toArray());
 				}
-				
 				$creds = array(
 					'user_login' => $post['username'],
 					'user_password' => $post['password'],
 				);
 				if (isset($post['remember_me'])) {
-					$check = $this->_user->login($creds, true);	
+					$check = Auth::login($creds, true);	
 				} else {
-					$check = $this->_user->login($creds);
+					$check = Auth::login($creds);
 				}
 				if (isset($check['errors'])) {
 					return $check;
@@ -104,13 +104,11 @@ class Combo extends ComponentBase
 				}
 				break;
 		}
-		
-		// How to redirect
-		//return Redirect::to('http://google.com');
 		return false;
 	}
 	
-	public function defineProperties() {
+	public function defineProperties()
+	{
 		return [
 			'password_recovery_page' => [
 				 'title'             => 'Password Recovery Page',
@@ -128,14 +126,6 @@ class Combo extends ComponentBase
 				 'required' 		 => 'true',
 				 'validationMessage' => 'This field is required',
 			],
-			'redirect_registration' => [
-				 'title'             => 'Login Registration',
-				 'description'       => 'The user will be redirected to this page after a successful registration',
-				 'default'           => '/dashboard',
-				 'type'              => 'string',
-				 'required' 		 => 'true',
-				 'validationMessage' => 'This field is required',
-			],
 			'email_verfication' => [
 				 'title'             => 'Login Registration',
 				 'description'       => 'If set to true, the user must validate their email before they can log in.',
@@ -145,6 +135,4 @@ class Combo extends ComponentBase
 			]
 		];
 	}
-	
-
 }

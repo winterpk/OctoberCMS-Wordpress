@@ -1,7 +1,7 @@
 <?php namespace Winterpk\Wordpress\Components;
 
 use Cms\Classes\ComponentBase;
-use Winterpk\Wordpress\Classes\wpUser;
+use Winterpk\Wordpress\Facades\Auth;
 use Redirect;
 use Validator;
 use ValidationException;
@@ -25,13 +25,6 @@ class Session extends ComponentBase
 	 * @var object
 	 */
 	public $wp_user;
-	
-	/*
-	public function __construct() {
-		
-		parent::__construct();
-	}*/
-
 	
     public function componentDetails()
     {
@@ -73,26 +66,24 @@ class Session extends ComponentBase
     }
 	
 	public function onLogout() {
-		$this->_user = wpUser::instance();
-		$this->_user->logout();
+		Auth::logout();
 	}
 	
 	public function onRun() {
-		$this->_user = wpUser::instance();
-		$this->logged_in = (int)$this->_user->logged_in();
-		if ($this->property('redirect_logout') && $this->logged_in == false) {
+		$this->logged_in = (int)Auth::logged_in();
+		if ($this->property('redirect_logout') && $this->logged_in == 0) {
 			return Redirect::to($this->property('redirect_logout'));
 		}
-		if ($this->property('redirect_login') && $this->logged_in == true) {
+		if ($this->property('redirect_login') && $this->logged_in == 1) {
 			return Redirect::to($this->property('redirect_login'));
 		}
 		
-		$this->wp_user = $this->_user->wp_get_current_user();
+		$this->wp_user = Auth::wp_get_current_user();
 		
 		if ($this->wp_user->data) {
-			$this->wp_user = $this->wp_user->to_array();
+			$this->page['user'] = $this->wp_user->to_array();
 		} else {
-			$this->wp_user = 0;
+			$this->page['user'] = false;
 		}	
 	}
 }

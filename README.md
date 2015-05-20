@@ -20,9 +20,26 @@ This means that this plugin CANNOT be used in combination with RainLab.User.
 
 ## Installation
 Use Winterpk.Wordpress with the October plugin installer.  Otherwise upload to /plugins/winterpk/wordpress and log out and back into October backend.
+For the flash messages to work you must add the flash template tags to your theme, ie:
+
+	{% flash %}
+	    <div class="alert alert-{{ type }}">
+	        {{ message }}
+	    </div>
+	{% endflash %}
 
 - Combo component displays a registration and login form.
 - Passwordrecovery displays a password recovery form. Add this component to the a page with the route "/password-recover". If you choose any other route, then make sure you set the appropriate value for Combo component.
 - Session is used to retreive user data and provide auth.
 - Verification is used to verify a users email if email verfication is turned on. 
 
+## Usage
+
+### Session Component
+
+	{% if user %}
+	    <p>Welcome back {{ user.display_name }}</p>
+	{% else %}
+	    <p>Welcome to the site</p>
+	{% endif %}
+	

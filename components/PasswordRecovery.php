@@ -1,7 +1,7 @@
 <?php namespace Winterpk\Wordpress\Components;
 
 use Cms\Classes\ComponentBase;
-use Winterpk\Wordpress\Classes\wpUser;
+use Winterpk\Wordpress\Facades\Auth;
 use Validator;
 use Redirect;
 
@@ -22,8 +22,6 @@ class PasswordRecovery extends ComponentBase
 		//'required' => 'Required',
 	);
 	
-	private $_user;
-	
     public function componentDetails()
     {
         return [
@@ -34,7 +32,6 @@ class PasswordRecovery extends ComponentBase
 	
 	// Ajax handler
 	public function onRecovery() {
-		$this->_user = wpUser::instance();
 		
 		// Attempt to load up a user by email or username
 		$post = post();
@@ -45,24 +42,24 @@ class PasswordRecovery extends ComponentBase
 		$login = $post['login'];
 		
 		// Attempt to load user by email first
-		$user = $this->_user->get_user_by('email', $login);
+		$user = Auth::get_user_by('email', $login);
 		if ( ! $user) {
 			
 			// Attempt to load user by username
-			$user = $this->_user->get_user_by('login', $login);
+			$user = Auth::get_user_by('login', $login);
 			if ( ! $user) {
 				return array('errors' => array('login' => array('Invalid username or email')));
 			}
 		}
 		
 		// We have the user so generate a key and store in the user meta
-		$key = md5(uniqid(rand(), true));
+		$key = md5(rand(0, 1000));
 		
 		// Remove any old keys
-		$this->_user->delete_metadata('user', $user->ID, '_recovery_key', '', true);
+		Auth::delete_metadata('user', $user->ID, '_recovery_key', '', true);
 		
 		// Create new key
-		$this->_user->add_user_meta($user->ID, '_recovery_key', $key);
+		Auth::add_user_meta($user->ID, '_recovery_key', $key);
 		
 		// Create the validation link and send email
 		$host = 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . $_SERVER['HTTP_HOST'];
@@ -91,21 +88,21 @@ class PasswordRecovery extends ComponentBase
 	}
 
 	public function onUpdate() {
-		$this->_user = wpUser::instance();
+		
 		// Load user by meta key and update the password if they validate
 		$post = post();
 		$validation = Validator::make($post, $this->update_rules, $this->messages);
 		if ($validation->fails()) {
 			return array('errors' => $validation->errors()->toArray());
 		}
-		$user = $this->_user->get_users(array('meta_key' => '_recovery_key', 'meta_value' => $post['key']));
+		$user = Auth::get_users(array('meta_key' => '_recovery_key', 'meta_value' => $post['key']));
 		if ( ! $user) {
 			return array('#password-recovery-forms' => $this->renderPartial('passwordrecovery::error'));
 		}
 		
 		// Update password and delete the reset key
-		$this->_user->update_password($post['password'], $user[0]->ID);
-		$this->_user->delete_metadata('user', $user[0]->ID, '_recovery_key', '', true);
+		Auth::update_password($post['password'], $user[0]->ID);
+		Auth::delete_metadata('user', $user[0]->ID, '_recovery_key', '', true);
 		
 		return array('#password-recovery-forms' => $this->renderPartial('passwordrecovery::complete'));
 	}
@@ -116,14 +113,6 @@ class PasswordRecovery extends ComponentBase
 	
     public function defineProperties() {
 		return [
-			'password_recovery_page' => [
-				 'title'             => 'Password Recovery Page',
-				 'description'       => 'This is needed to redirect to the forget password page',
-				 'default'           => '/password-recovery',
-				 'type'              => 'string',
-				 'required' 		 => 'true',
-				 'validationMessage' => 'This field is required',
-			], 
 			'404_page' => [
 				 'title'             => '404 Page',
 				 'description'       => 'This is needed to redirect to the 404 page',
@@ -136,12 +125,11 @@ class PasswordRecovery extends ComponentBase
 	}
 	
 	public function onRun() {
-		$this->_user = wpUser::instance();
 		$get = get();
 		if (isset($get['key'])) {
 			
 			// Attempt to load the user by the key
-			$user = $this->_user->get_users(array('meta_key' => '_recovery_key', 'meta_value' => $get['key']));
+			$user = Auth::get_users(array('meta_key' => '_recovery_key', 'meta_value' => $get['key']));
 			if ( ! $user) {
 				return Redirect::to($this->property('404_page'));
 			}
@@ -154,10 +142,9 @@ class PasswordRecovery extends ComponentBase
 	
 	public function onRender()
 	{
-		$this->_user = wpUser::instance();
 		$get = get();
 		if (isset($get['key'])) {
-			$this->page->key = $get['key'];
+			$this->page['key'] = $get['key'];
 		}
 	}
 }

@@ -27,7 +27,6 @@ class Plugin extends PluginBase
 	{
 		$get = get();
 		if ( ! empty($_GET['verify'])) {
-			$this->_user = wpUser::instance();
 			$get = get();
 			
 			if (isset($get['email']) &&  filter_var($get['email'], FILTER_VALIDATE_EMAIL)){
@@ -37,12 +36,13 @@ class Plugin extends PluginBase
 				$key = $get['key'];
 			}
 			if (isset($email) && isset($key)) {
-				$check = $this->_user->validate_user($email, $key);
+				$check = Auth::validate_user($email, $key);
 				return Redirect::to($this->property('redirect'));
 			} else {
 				return Redirect::to('/');
 			}
 		}
+		
 		// Register Auth service provider
 		App::register('Winterpk\Wordpress\Classes\AuthServiceProvider');
 	}
@@ -62,12 +62,9 @@ class Plugin extends PluginBase
 	public function registerComponents()
 	{
 		return [
-			//'Winterpk\Wordpress\Components\Login' => 'login',
-			//'Winterpk\Wordpress\Components\Register' => 'register',
 			'Winterpk\Wordpress\Components\Session' => 'session',
 			'Winterpk\Wordpress\Components\PasswordRecovery' => 'passwordrecovery',
 			'Winterpk\Wordpress\Components\Combo' => 'combo',
-			'Winterpk\Wordpress\Components\Verification' => 'verification',
 		];
 	}
 	
